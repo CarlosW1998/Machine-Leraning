@@ -1,0 +1,5 @@
+#Not include Conteiner folders
+.*/
+
+#Not include .pyc files
+*.pyc
