@@ -2,18 +2,18 @@ import random
 
 
 class RLAgent:
-	def __init__(self, actions, ER = 0.97, DR = 0.01):
+	def __init__(self, actions, ER = 0.97	, DR = 0.001):
 		self.actions = actions
 		self.politc = {}
 		self.explorerationRate = ER
 		self.decreaseRate = DR
 	
 	def maxPick(self, state):
-		j = self.actions[0]
+		j = str(self.actions[0])
 		for i in self.politc[state].keys():
 			if self.politc[state][i] > self.politc[state][j]:
 				j = i
-		return j
+		return int(j)
 	
 	def createState(self, key):
 		self.politc[key] = {}
@@ -40,10 +40,32 @@ class RLAgent:
 		return random.choice(self.actions)
 	
 	def stateActionFunc(self, state, action):
-		print(state, action)
+		
 		if not self.existState(state): self.createState(state)
 		return self.politc[state][action]
 
 	def updatePolitc(self, reward, state, action):
 		if not self.existState(state): self.createState(state)
 		self.politc[state][action] = reward
+	
+	def getReward(self, state, action):
+		
+		if state[0] < -0.60 and state[1] < 0 and  action == 0: return 5
+		if state[0] < -0.60 and state[1] > 0 and  action == 1: return -5
+		if state[0] < -0.60 and state[1] < 0 and  action == 2: return -5
+
+		if state[0] < -0.60 and state[1] > 0 and  action == 0: return -5
+		if state[0] < -0.60 and state[1] > 0 and  action == 1: return -5
+		if state[0] < -0.60 and state[1] > 0 and  action == 2: return 5
+
+		if state[0] > -0.60 and state[1] > 0 and  action == 2: return 5
+		if state[0] > -0.60 and state[1] > 0 and  action == 1: return -5
+		if state[0] > -0.60 and state[1] > 0 and  action == 0: return -5
+
+		if state[0] > -0.60 and state[1] < -0.2 and  action == 2: return -5
+		if state[0] > -0.60 and state[1] < -0.2 and  action == 1: return -5
+		if state[0] > -0.60 and state[1] < -0.2 and  action == 0: return 5
+		
+		
+		return 0
+	
