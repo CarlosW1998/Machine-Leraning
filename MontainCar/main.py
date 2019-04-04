@@ -1,8 +1,8 @@
 import gym
-from agents import RLAgent
+from agents import RLAgent, CMACagent
 
 
-def play_a_random_game_first():
+def play_a_random_game_first_TableAgent():
     agent = RLAgent([0, 1, 2])
     acumuledReward = 0.0
 
@@ -44,11 +44,39 @@ def play_a_random_game_first():
     
     env.reset()
 
+def play_a_random_game_first_FuncAprox():
+    agent = CMACagent([0, 1, 2])
+    acumuledReward = 0.0
+    action = agent.pickAction()
+    
+
+    for step_index in range(goal_steps):
+        print(step_index)
+       # print("Step {}:".format(step_index))
+       # print("action: {}".format(action))
+       # print("observation: {}".format(observation))
+       # print("reward: {}".format(reward))
+       # print("done: {}".format(done))
+       # print("info: {}".format(info))
+       # print()
+        env.render()
+        observation, reward, done, info = env.step(action)
+        acumuledReward += agent.getReward(observation, action)
+        agent.updatePolitc(acumuledReward, observation, action)
+        action = agent.stateFunc(observation)
+        print(observation)
+        print(agent.explorerationRate)
+        
+        
+
+    
+    env.reset()
+
 
 env = gym.make('MountainCar-v0')
 env.reset()
 goal_steps = 10000
 score_requirement = -500
 intial_games = 10000
-
-play_a_random_game_first()
+#play_a_random_game_first_TableAgent()
+play_a_random_game_first_FuncAprox()
